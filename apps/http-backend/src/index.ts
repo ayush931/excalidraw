@@ -3,6 +3,7 @@ import { JWT_TOKEN } from '@repo/backend-common/config';
 import express from 'express';
 import { middleware } from './middleware.js';
 import jwt from 'jsonwebtoken';
+import { prismaClient } from '@repo/db/client';
 
 const app = express();
 
@@ -15,6 +16,14 @@ app.post('/signup', (req, res) => {
       message: 'Invalid input'
     })
   }
+
+  prismaClient.user.create({
+    data: {
+      email: data.data.username,
+      name: data.data.name,
+      password: data.data.password
+    } as any
+  })
 
   res.json({
     userid: "123"
